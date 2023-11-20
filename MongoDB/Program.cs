@@ -5,6 +5,13 @@ using Newtonsoft.Json;
 
 internal class Program
 {
+	private static bool stopRequested = false;
+
+	private static void TimerCallback(object state)
+	{
+		Console.WriteLine("10 seconds end");
+		stopRequested = true;
+	}
 	private static async Task Main(string[] args)
 	{
 		// TODO:
@@ -42,50 +49,29 @@ internal class Program
 		collection = client.GetDatabase(dbName)
 		   .GetCollection<Data>(collectionName);
 		
-
-		//Staff staff1 = new Staff(2, "Nikita", "Ziubin", "Reception", "Administration", "email@gmail.com", "+380123456789");
-		//Staff staff2 = new Staff(3, "Nikita", "Ziubin", "Reception", "Administration", "email@gmail.com", "+380123456789");
-
-		//List<Staff> staffs = new List<Staff>();
-		//staffs.Add(staff1);
-		//staffs.Add(staff2);
-		//collection.InsertMany(staffs);
-
-		//var staffs = collection.Find(Builders<Staff>.Filter.Empty)
-		//	  .ToList();
-		//foreach (var staff in staffs)
-		//{
-		//	Console.WriteLine(staff.id + " " + staff.firstName + " " + staff.lastName);
-		//}
-
 		List<Room> rooms = new List<Room>();
 
-		//Data data1 = new Data(1);
-		//await Task.Delay(1000);
-		//for (int i = 1; i < 10; i++)
-		//{
-		//	Sensor sensor = new Sensor(1);
-		//	for (int j = 1; j < 10; j++)
-		//	{
-		//		Data  data = new Data(j);
-		//		sensor.datas.Add(data);
-		//		//await Task.Delay(1000);
-		//	}
-		//	Room room = new Room(i, 1, 50, 4, 1, 5, 2, sensor);
-		//	rooms.Add(room);
-		//}
-		
-		//collection.InsertMany(rooms);
+		List<Data> datas = new List<Data>();
+		Timer timer = new Timer(TimerCallback, null, 1000, Timeout.Infinite);
 
-		//List<Data> datas = new List<Data>();
-		for (int i = 1;  i <= 1000000; i++) 
+		for (int i = 1;  i <= 10000; i++)	
 		{
-
-			Data data = new Data();
-			Console.WriteLine($"{JsonConvert.SerializeObject(data)}");
-			collection.InsertOne(data);
-			await Task.Delay(5);
+			if (stopRequested)
+			{
+				Console.WriteLine($"i: {i}");
+				break;
+			}
+			for (int j = 0; j < 100;  j++) 
+			{
+				Data data = new Data();
+				datas.Add(data);
+				Console.WriteLine($"{JsonConvert.SerializeObject(data)}");
+			}
+			
+			collection.InsertMany(datas);
+			await Task.Delay(0);
 		}
-
+		//MOngo 1120
+		//SQL 23491
 	}
 }
