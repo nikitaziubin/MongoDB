@@ -52,7 +52,7 @@ internal class Program
 		List<Room> rooms = new List<Room>();
 
 		List<Data> datas = new List<Data>();
-		Timer timer = new Timer(TimerCallback, null, 1000, Timeout.Infinite);
+		//Timer timer = new Timer(TimerCallback, null, 1000, Timeout.Infinite);
 
 		for (int i = 1;  i <= 10000; i++)	
 		{
@@ -71,7 +71,7 @@ internal class Program
 			collection.InsertMany(datas);
 			await Task.Delay(0);
 		}
-		//MOngo 1120
-		//SQL 23491
+		//Mongo DB 122155 за 1 сек
+		//SQL 1422 за 1 сек
 	}
 }
