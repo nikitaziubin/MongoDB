@@ -14,13 +14,6 @@ internal class Program
 	}
 	private static async Task Main(string[] args)
 	{
-		// TODO:
-		// Replace the placeholder connection string below with your
-		// Altas cluster specifics. Be sure it includes
-		// a valid username and password! Note that in a production environment,
-		// you do not want to store your password in plain-text here.
-
-		//var mongoUri = "<mongodb+srv://<nikziu>:<Yyra4HkYbcVZKemI>@fedoruslab2.ccpqawi.mongodb.net/>";
 		var mongoUri = "mongodb://localhost:27017";
 
 		IMongoClient client;
@@ -53,25 +46,22 @@ internal class Program
 
 		List<Data> datas = new List<Data>();
 		//Timer timer = new Timer(TimerCallback, null, 1000, Timeout.Infinite);
-
-		for (int i = 1;  i <= 10000; i++)	
+		int n = 1;
+		for (int i = 1;  i <= 10000000000000; i++)
 		{
-			if (stopRequested)
-			{
-				Console.WriteLine($"i: {i}");
-				break;
-			}
+
 			for (int j = 0; j < 100;  j++) 
 			{
 				Data data = new Data();
 				datas.Add(data);
-				Console.WriteLine($"{JsonConvert.SerializeObject(data)}");
+				Console.WriteLine($"i: {n++} {JsonConvert.SerializeObject(data)}");
 			}
 			
 			collection.InsertMany(datas);
 			await Task.Delay(0);
+			datas.Clear();
 		}
-		//Mongo DB 122155 за 1 сек
-		//SQL 1422 за 1 сек
+		//Mongo DB 5237 and 442 за 1 сек
+		//SQL 1450 and 770 за 1 сек
 	}
 }
